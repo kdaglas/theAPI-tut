@@ -1,7 +1,7 @@
 import unittest
 from run import app
 from flask import jsonify, json
-from app.models import User
+from app.models import Customer
 
 class Test_auth(unittest.TestCase):
 
@@ -12,7 +12,7 @@ class Test_auth(unittest.TestCase):
         """ a test for successful user registration """
         response = self.app.post("/api/v1/register",
             content_type='application/json',
-            data=json.dumps(dict(username="Douglas", emailaddress="daglach7@gmail.com", password="callmee"),)
+            data=json.dumps(dict(username="Douglas", emailaddress="daglach7@gmail.com", contact="0755598090", password="callmee"),)
             )      
         reply = json.loads(response.data)
         self.assertEquals(reply["message"], "Diary successfully created")
@@ -24,7 +24,7 @@ class Test_auth(unittest.TestCase):
         response = self.app.post(
                 "/api/v1/register",
             content_type='application/json',
-            data=json.dumps(dict(username="", emailaddress="daglach7@gmail.com", password="callmee"),)
+            data=json.dumps(dict(username="", emailaddress="daglach7@gmail.com", contact="0755598090", password="callmee"),)
             )              
         reply = json.loads(response.data)
         self.assertEquals(reply["message"], "Username is missing")
@@ -35,7 +35,7 @@ class Test_auth(unittest.TestCase):
         """ Test for empty emailaddress validation """
         response = self.app.post("/api/v1/register",
             content_type='application/json',
-            data=json.dumps(dict(username="Douglas", emailaddress="", password="callmee"),)
+            data=json.dumps(dict(username="Douglas", emailaddress="", contact="0755598090", password="callmee"),)
             )              
         reply = json.loads(response.data)
         self.assertEquals(reply["message"], "Emailaddress is missing")
@@ -46,7 +46,18 @@ class Test_auth(unittest.TestCase):
         """ Test for empty password validation """
         response = self.app.post("/api/v1/register",
             content_type='application/json',
-            data=json.dumps(dict(username="Douglas", emailaddress="daglach7@gmail.com", password=""),)
+            data=json.dumps(dict(username="Douglas", emailaddress="daglach7@gmail.com", contact="0755598090", password=""),)
+            )              
+        reply = json.loads(response.data)
+        self.assertEquals(reply["message"], "Password is missing")
+        self.assertEquals(response.status_code, 400)
+
+
+    def test_registration_with_empty_contact(self):
+        """ Test for empty password validation """
+        response = self.app.post("/api/v1/register",
+            content_type='application/json',
+            data=json.dumps(dict(username="Douglas", emailaddress="daglach7@gmail.com", contact="", password="callmee"),)
             )              
         reply = json.loads(response.data)
         self.assertEquals(reply["message"], "Password is missing")
@@ -57,7 +68,7 @@ class Test_auth(unittest.TestCase):
         """ Test for successful login """
         response = self.app.post("/api/v1/login",
             content_type='application/json',
-            data=json.dumps(dict(username="Doug", password="callmee"))
+            data=json.dumps(dict(username="Douglas", password="callmee"))
             )            
         reply = json.loads(response.data)
         self.assertEquals(reply["message"], "Successfully logged in")
@@ -72,18 +83,31 @@ class Test_auth(unittest.TestCase):
                 data=json.dumps(dict(username="", password="callmee"))
                 )            
         reply = json.loads(response.data)
-        self.assertEquals(reply["message"], "Username is wrong")
+        self.assertEquals(reply["message"], "Username is missing")
         self.assertEquals(response.status_code, 400)
 
 
-    def test_user_login_with_wrong_or_no_password(self):
+    def test_user_login_with_no_password(self):
         """ Test for login with wrong or no password """
         response = self.app.post(
                 "/api/v1/login",
                 content_type='application/json',
-                data=json.dumps(dict(username="Doug", password=""))
+                data=json.dumps(dict(username="Douglas", password=""))
                 )            
         reply = json.loads(response.data)
 
-        self.assertEquals(reply["message"], "Password is wrong")
+        self.assertEquals(reply["message"], "Password is missing")
+        self.assertEquals(response.status_code, 400)
+
+
+    def test_user_login_with_wrong_information(self):
+        """ Test for login with wrong or no password """
+        response = self.app.post(
+                "/api/v1/login",
+                content_type='application/json',
+                data=json.dumps(dict(username="dan", password="itsme"))
+                )            
+        reply = json.loads(response.data)
+
+        self.assertEquals(reply["message"], "Customer does not exist")
         self.assertEquals(response.status_code, 400)

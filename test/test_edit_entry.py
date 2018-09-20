@@ -8,17 +8,15 @@ class Test_Edit_Entry(unittest.TestCase):
     def setUp(self):
         self.app = app.test_client()
 
-    def test_edit_entry(self):
+    def test_edit_order(self):
         '''Test to modify single diary'''
-        response = self.app.post("/api/v1/diaries",
-                                content_type='application/json',
-                                data=json.dumps(dict(id="1", title="Coding", content="The best way of life is code", today="17.07.2018"),)
+        response = self.app.post("/api/v1/orders", content_type='application/json',
+                                data=json.dumps(dict(orderId="1", customerId="1", today="17.07.2018", thetype="breakfast", food="milk", quantity="3", price="2000", status="not completed"),)
                                 )
 
-        response = self.app.put("/api/v1/diaries/1",
-                                content_type='application/json',
-                                data=json.dumps(dict(id="1", title="Andela", content="The way to me, code", today="17.07.2018"),)
+        response = self.app.put("/api/v1/orders/1", content_type='application/json',
+                                data=json.dumps(dict(orderId="1", customerId="1", today="17.07.2018", thetype="breakfast", food="milk", quantity="3", price="2000", status="completed"),)
                                 )
 
         data = json.loads(response.data.decode())
-        self.assertEquals(data["message"], "Entry has been modified")
+        self.assertEquals(data["message"], "order has been modified")
