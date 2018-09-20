@@ -15,7 +15,7 @@ class Test_auth(unittest.TestCase):
             data=json.dumps(dict(username="Douglas", emailaddress="daglach7@gmail.com", contact="0755598090", password="callmee"),)
             )      
         reply = json.loads(response.data)
-        self.assertEquals(reply["message"], "Diary successfully created")
+        self.assertEquals(reply["message"], "Customer successfully registered")
         self.assertEquals(response.status_code, 200)
 
     
@@ -60,7 +60,7 @@ class Test_auth(unittest.TestCase):
             data=json.dumps(dict(username="Douglas", emailaddress="daglach7@gmail.com", contact="", password="callmee"),)
             )              
         reply = json.loads(response.data)
-        self.assertEquals(reply["message"], "Password is missing")
+        self.assertEquals(reply["message"], "Contact is missing")
         self.assertEquals(response.status_code, 400)
 
     

@@ -44,16 +44,16 @@ def login():
         return jsonify({'message': 'Password is missing'}), 400
 
     for customer in customers:
-        if customer['username'] == username and customer['password'] == password:
-            return jsonify({'message': 'Successfully logged in'})
-    return jsonify({'message': 'Customer does not exist'})
+        if customer.username == username and customer.password == password:
+            return jsonify({'message': 'Successfully logged in'}), 200
+    return jsonify({'message': 'Customer does not exist'}), 400
 
 
 @app.route("/api/v1/orders", methods=['POST'])
 def place_order():
     data = request.get_json()
     orderId = len(orders) + 1
-    customerId = data.get_json('customerId')
+    customerId = data.get('customerId')
     today = str(date.today())
     food = data.get('food')
     thetype = data.get('thetype')
