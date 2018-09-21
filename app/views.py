@@ -1,18 +1,16 @@
 from app import app
-import json
 from flask import request, json, jsonify
-from app.models import Customer, Order
+from app.modules.customer_model import Customer
+from app.modules.order_model import Order
 from datetime import date
-
-
-customers = []
-orders = []
+import uuid
 
 
 @app.route("/api/v1/register", methods=['POST'])
 def register():
+
     data = request.get_json()
-    customerId = len(customers) + 1
+    customerId = int(str(uuid.uuid1().int)[:3])
     username = data.get('username')
     emailaddress = data.get('emailaddress')
     contact = data.get('contact')
@@ -27,13 +25,14 @@ def register():
     if len(password) < 1:
         return jsonify({'message': 'Password is missing'}), 400
 
-    new_customer = Customer(id, username, emailaddress, contact, password)
-    customers.append(new_customer)
-    return jsonify({'message': 'Customer successfully registered'})
+    new_customer = Customer(customerId, username, emailaddress, contact, password)
+    registered_customer = Customer.register_customer(new_customer)
+    return jsonify({'New customer':registered_customer,
+                    'message': 'Customer has been registered'}), 201 
 
 
 @app.route("/api/v1/login", methods=['POST'])
-def login():
+def login(username, password):
     data = request.get_json()
     username = data.get('username')
     password = data.get('password')
@@ -43,16 +42,23 @@ def login():
     if len(password) < 1:
         return jsonify({'message': 'Password is missing'}), 400
 
-    for customer in customers:
-        if customer.username == username and customer.password == password:
-            return jsonify({'message': 'Successfully logged in'}), 200
-    return jsonify({'message': 'Customer does not exist'}), 400
+    # customer = Customer.get_a_customer(customerId)
+    # return jsonify({'Customer': customer, 'message': 'Your one order successfully viewed'}), 201
+
+    # for customer in all_customers:
+    #     if customer.username == username and customer.password == password:
+    #         return jsonify({'message': 'Successfully logged in'}), 200
+    # return jsonify({'message': 'Customer does not exist'}), 400
+
+    customer = Customer.login(username, password)
+    return jsonify({'message': 'Customer has been logged in'}), 200
 
 
 @app.route("/api/v1/orders", methods=['POST'])
 def place_order():
+
     data = request.get_json()
-    orderId = len(orders) + 1
+    orderId = int(str(uuid.uuid1().int)[:3])
     customerId = data.get('customerId')
     today = str(date.today())
     food = data.get('food')
@@ -71,53 +77,35 @@ def place_order():
         return jsonify({'message': 'Price missing'}), 400
     elif len(quantity) < 1:
         return jsonify({'message': 'Quantity missing'}), 400
-
-    for order in orders:
-        if order.customerId == customerId and order.food == food:
-            return jsonify({'message':'Make another order'}), 403
         
-    new_order = Order(orderId, today, customerId, thetype, food, price, quantity, status)
-    orders.append(new_order)   
-    
-    return jsonify({'message': 'Order successfully added'}), 200
+    new_order = Order(customerId, orderId, thetype, food, price, quantity, status, today)
+    placed_order = Order.place_order(new_order)
+    return jsonify({'Placed order': placed_order,
+                    'message': 'Your order has been placed'}), 201
 
 
 @app.route("/api/v1/orders", methods=['GET'])
 def get_all_orders():
-    if len(orders) > 0:
-        return jsonify({'message': 'All orders successfully viewed',
-                        'All entries here': [
-                            order.__dict__ for order in orders
-                        ]}), 200
-
-    return jsonify({'message': 'No order added'}), 404
+    
+    all_orders = Order.get_all_orders()
+    return jsonify({'All your orders': all_orders,
+                    'message': 'All orders have been viewed'}), 201
 
 
 @app.route("/api/v1/orders/<orderId>", methods=["GET"])
 def get_single_order(orderId):
-    if int(orderId) > 0:
-        if len(orders) > 0:
-            for order in orders:
-                if order.orderId == int(orderId):
-                    return jsonify({
-                        "message": "Single order successfully viewed",
-                        "Diary Entry": order.__dict__
-                    }), 200
-
-            return jsonify({"message": "order doesnot exist"})
-        return jsonify({"message": "No order has been registered yet"}), 404
-    return jsonify({"message": "Single order id has to bigger than zero"}), 404
+    
+    order = Order.get_one_order(orderId)
+    return jsonify({"Your order": order,
+                    'message': 'One order has been viewed'}), 201
 
 
 @app.route("/api/v1/orders/<orderId>", methods=["PUT"])
 def edit_order(orderId):
+    
     data = request.get_json()
-    new_order = {}
-    new_order['status'] = data.get('status')
+    status = data.get('status')
 
-    for order in orders:
-        if order.orderId == int(orderId):
-            order.status = new_order['status']
-            return jsonify({"message": "order has been modified"}), 200
-        return jsonify({"message": "No such order"}), 404
-    return jsonify({"message": "Single order id has to be bigger than zero"}), 404
+    updated_order = Order.update_order(orderId, status)
+    return jsonify({"Updated order": updated_order,
+                'message': 'Order status has been updated'}), 201
