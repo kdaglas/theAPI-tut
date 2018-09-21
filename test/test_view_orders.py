@@ -3,7 +3,7 @@ from app import views
 from run import app
 import json
 
-class Test_View_Orders(unittest.TestCase):
+class Test_Get_Orders(unittest.TestCase):
 
     def setUp(self):
         self.client = app.test_client()
@@ -16,7 +16,7 @@ class Test_View_Orders(unittest.TestCase):
                                 
         reply = json.loads(response.data)
         self.assertEqual(reply["message"], "All orders have been viewed")
-        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.status_code, 302)
 
 
     # def test_get_all_orders_emty_list(self):
@@ -32,7 +32,7 @@ class Test_View_Orders(unittest.TestCase):
     #     self.assertEquals(reply2["message"],"No order added")
 
 
-    def test_get_single_diary(self):
+    def test_get_single_order(self):
 
         # Test to fetch single order
 
@@ -40,7 +40,7 @@ class Test_View_Orders(unittest.TestCase):
                                 
         reply = json.loads(response.data)
         self.assertEqual(reply["message"], "One order has been viewed")
-        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.status_code, 302)
 
 
     # def test_get_single_order_with_wrong_id(self):

@@ -9,7 +9,8 @@ class Test_auth(unittest.TestCase):
         self.client = app.test_client()
 
     def test_registration(self):
-        """ a test for successful user registration """
+
+        # Testing for user registration
         
         response = self.client.post("/api/v1/register", data = json.dumps(
             dict(username = "Douglas", emailaddress="daglach7@gmail.com", contact = "+256-755-598090", 
@@ -21,7 +22,8 @@ class Test_auth(unittest.TestCase):
 
     
     def test_registration_with_empty_username(self):
-        """ Test for empty username validation """
+        
+        # Test for empty username validation
         
         response = self.client.post("/api/v1/register", data = json.dumps(
             dict(username = "", emailaddress="daglach7@gmail.com", contact = "+256-755-598090", 
@@ -33,22 +35,26 @@ class Test_auth(unittest.TestCase):
       
 
     def test_registration_with_empty_emailaddress(self):
-        """ Test for empty emailaddress validation """
+
+        # Testing for empty emailaddress validation
         
         response = self.client.post("/api/v1/register", data = json.dumps(
             dict(username = "Douglas", emailaddress="", contact = "+256-755-598090", 
-                password = "Dag1234")), content_type = 'application/json')              
+                password = "Dag1234")), content_type = 'application/json')
+
         reply = json.loads(response.data)
-        self.assertEquals(reply["message"], "Emailaddress is missing")
+        self.assertEquals(reply["message"], "Email address is missing")
         self.assertEquals(response.status_code, 400)
     
     
     def test_registration_with_empty_password(self):
-        """ Test for empty password validation """
+        
+        # Test for empty password validation """
         
         response = self.client.post("/api/v1/register", data = json.dumps(
             dict(username = "Douglas", emailaddress="daglach7@gmail.com", contact = "+256-755-598090", 
-                password = "")), content_type = 'application/json')              
+                password = "")), content_type = 'application/json') 
+
         reply = json.loads(response.data)
         self.assertEquals(reply["message"], "Password is missing")
         self.assertEquals(response.status_code, 400)
@@ -59,10 +65,76 @@ class Test_auth(unittest.TestCase):
         
         response = self.client.post("/api/v1/register", data = json.dumps(
             dict(username = "Douglas", emailaddress="daglach7@gmail.com", contact = "", 
-                password = "Dag1234")), content_type = 'application/json')              
+                password = "Dag1234")), content_type = 'application/json')
+
         reply = json.loads(response.data)
         self.assertEquals(reply["message"], "Contact is missing")
         self.assertEquals(response.status_code, 400)
+
+
+    def test_input_with_wrong_username(self):
+
+        # Test for wrong username validation 
+
+        response = self.client.post("/api/v1/register", data = json.dumps(
+            dict(username = "2dag", emailaddress="daglach7@gmail.com", contact = "+256-755-598090", 
+                 password = "Dag1234")), content_type = 'application/json')
+                                           
+        reply = json.loads(response.data)
+        self.assertEqual(reply["message"], "Username should be in characters")
+        self.assertEqual(response.status_code, 400)
+
+
+    def test_input_with_spaces_in_username(self):
+
+        # Test for spaces in username validation 
+
+        response = self.client.post("/api/v1/register", data = json.dumps(
+            dict(username = " dag", emailaddress="daglach7@gmail.com", contact = "+256-755-598090", 
+                 password = "Dag1234")), content_type = 'application/json')
+                                           
+        reply = json.loads(response.data)
+        self.assertEqual(reply["message"], "Username should have no spaces")
+        self.assertEqual(response.status_code, 400)
+
+
+    def test_input_with_wrong_emailaddress(self):
+
+        # Test for wrong emailaddress validation 
+
+        response = self.client.post("/api/v1/register", data = json.dumps(
+            dict(username = "Dag", emailaddress="daglach7gmailcom", contact = "0755598090", 
+                 password = "Dag1234")), content_type = 'application/json')
+                                           
+        reply = json.loads(response.data)
+        self.assertEqual(reply["message"], "Email address should be like this format 'daglach7@gmail.com'")
+        self.assertEqual(response.status_code, 400)
+
+
+    def test_input_with_wrong_contact(self):
+
+        # Test for wrong contact validation 
+
+        response = self.client.post("/api/v1/register", data = json.dumps(
+            dict(username = "Dag", emailaddress="daglach7@gmail.com", contact = "0755598090", 
+                 password = "Dag1234")), content_type = 'application/json')
+                                           
+        reply = json.loads(response.data)
+        self.assertEqual(reply["message"], "Contact should be like this format '+256-755-598090'")
+        self.assertEqual(response.status_code, 400)
+
+
+    def test_input_with_wrong_password(self):
+
+        # Test for empty password validation 
+
+        response = self.client.post("/api/v1/register", data = json.dumps(
+            dict(username = "Dag", emailaddress="daglach7@gmail.com", contact = "+256-755-598090", 
+                 password = "fgt5")), content_type = 'application/json')
+                                           
+        reply = json.loads(response.data)
+        self.assertEqual(reply["message"], "Password must have 7 characters with atleast a lowercase, uppercase letter and a number")
+        self.assertEqual(response.status_code, 400)
 
     
     # def test_user_login_successful(self):
