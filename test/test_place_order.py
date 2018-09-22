@@ -27,106 +27,77 @@ class Test_Orders(unittest.TestCase):
         # a test for successfully placing an order 
 
         response = self.client.post("/api/v1/orders", data = json.dumps(
-            dict(customerId = "1234567890", orderId = "0987654321", thetype = "breakfast", food = "milk and bread", 
-                 price = "2000", ntity = "2", today = "2018-09-16")), content_type = 'application/json')
+            dict(customerId = "1234567890", orderId = "0987654321", thety = "breakfast", food = "milk and bread", 
+                 price = "2000", quantity = "2", today = "2018-09-16")), content_type = 'application/json')
                                 
         reply = json.loads(response.data)
         self.assertEqual(reply["message"], "The key or value fields are invalid or missing")
         self.assertEqual(response.status_code, 403)
 
     
-    def test_with_empty_data(self):
+    def test_with_empty_customerId(self):
 
         # Test for empty customerId validation
 
         response = self.client.post("/api/v1/orders", data = json.dumps(
-            dict(customerId = "", orderId = "09876", thetype = "", food = "", 
-                 price = "", quantity = "", today = "2018-09-16", status="not completed")), content_type = 'application/json')
+            dict(customerId = "", orderId = "09876", thetype = "breakfast", food = "milk and bread", 
+                 price = "2000", quantity = "2", today = "2018-09-16", status="not completed")), content_type = 'application/json')
 
         reply = json.loads(response.data)
-        self.assertEquals(reply["message"], "Some data is missing")
+        self.assertEquals(reply["message"], "CustomerId is missing")
+        self.assertEquals(response.status_code, 400)
+      
+
+    def test_with_empty_food(self):
+
+        # Test for empty food validation
+
+        response = self.client.post("/api/v1/orders", data = json.dumps(
+            dict(customerId = "12345", orderId = "09876", thetype = "breakfast", food = "", 
+                 price = "2000", quantity = "2", today = "2018-09-16", status="not completed")), content_type = 'application/json') 
+
+        reply = json.loads(response.data)
+        self.assertEquals(reply['message'], 'Food is missing')
         self.assertEquals(response.status_code, 400)
 
 
-    # def test_with_empty_customerId(self):
+    def test_with_empty_quantity(self):
 
-    #     # Test for empty customerId validation
+        # Test for empty quantity validation
 
-    #     response = self.client.post("/api/v1/orders", data = json.dumps(
-    #         dict(customerId = "", orderId = "09876", thetype = "breakfast", food = "milk and bread", 
-    #              price = "2000", quantity = "2", today = "2018-09-16", status="not completed")), content_type = 'application/json')
+        response = self.client.post("/api/v1/orders", data = json.dumps(
+            dict(customerId = "12345", orderId = "09876", thetype = "breakfast", food = "milk and bread", 
+                 price = "2000", quantity = "", today = "2018-09-16", status="not completed")), content_type = 'application/json')  
 
-    #     reply = json.loads(response.data)
-    #     self.assertEquals(reply["message"], "Some data is missing")
-    #     self.assertEquals(response.status_code, 400)
-      
-
-    # def test_with_empty_food(self):
-
-    #     # Test for empty food validation
-
-    #     response = self.client.post("/api/v1/orders", data = json.dumps(
-    #         dict(customerId = "12345", orderId = "09876", thetype = "breakfast", food = "", 
-    #              price = "2000", quantity = "2", today = "2018-09-16", status="not completed")), content_type = 'application/json') 
-
-    #     reply = json.loads(response.data)
-    #     self.assertEquals(reply['message'], 'Some data is missing')
-    #     self.assertEquals(response.status_code, 400)
+        reply = json.loads(response.data)
+        self.assertEquals(reply['message'], 'Quantity is missing')
+        self.assertEquals(response.status_code, 400)
 
 
-    # def test_with_empty_quantity(self):
+    def test_with_empty_price(self):
 
-    #     # Test for empty quantity validation
+        # Test for empty price validation
 
-    #     response = self.client.post("/api/v1/orders", data = json.dumps(
-    #         dict(customerId = "12345", orderId = "09876", thetype = "breakfast", food = "milk and bread", 
-    #              price = "2000", quantity = "", today = "2018-09-16", status="not completed")), content_type = 'application/json')  
+        response = self.client.post("/api/v1/orders", data = json.dumps(
+            dict(customerId = "12345", orderId = "09876", thetype = "breakfast", food = "milk and bread", 
+                 price = "", quantity = "2", today = "2018-09-16", status="not completed")), content_type = 'application/json')
 
-    #     reply = json.loads(response.data)
-    #     self.assertEquals(reply['message'], 'Some data is missing')
-    #     self.assertEquals(response.status_code, 400)
-
-
-    # def test_with_empty_price(self):
-
-    #     # Test for empty price validation
-
-    #     response = self.client.post("/api/v1/orders", data = json.dumps(
-    #         dict(customerId = "12345", orderId = "09876", thetype = "breakfast", food = "milk and bread", 
-    #              price = "", quantity = "2", today = "2018-09-16", status="not completed")), content_type = 'application/json')
-
-    #     reply = json.loads(response.data)
-    #     self.assertEquals(reply['message'], 'Some data is missing')
-    #     self.assertEquals(response.status_code, 400)
+        reply = json.loads(response.data)
+        self.assertEquals(reply['message'], 'Price is missing')
+        self.assertEquals(response.status_code, 400)
 
 
-    # def test_with_empty_type(self):
+    def test_with_empty_type(self):
 
-    #     # Test for empty type validation
+        # Test for empty type validation
 
-    #     response = self.client.post("/api/v1/orders", data = json.dumps(
-    #         dict(customerId = "12345", orderId = "09876", thetype = "", food = "milk and bread", 
-    #              price = "2000", quantity = "2", today = "2018-09-16", status="not completed")), content_type = 'application/json') 
+        response = self.client.post("/api/v1/orders", data = json.dumps(
+            dict(customerId = "12345", orderId = "09876", thetype = "", food = "milk and bread", 
+                 price = "2000", quantity = "2", today = "2018-09-16", status="not completed")), content_type = 'application/json') 
 
-    #     reply = json.loads(response.data)
-    #     self.assertEquals(reply['message'], 'Some data is missing')
-    #     self.assertEquals(response.status_code, 400)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        reply = json.loads(response.data)
+        self.assertEquals(reply['message'], 'The type is missing')
+        self.assertEquals(response.status_code, 400)
 
 
     # def test_with_same_data(self):
