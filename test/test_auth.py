@@ -18,8 +18,8 @@ class Test_auth(unittest.TestCase):
             'password' : "Dag1234"
         }
         
-        response = self.client.post("/api/v1/register", data = json.dumps(
-            dict(customer)), content_type = 'application/json')                
+        response = self.client.post("/api/v1/register", data = json.dumps(customer), 
+                                    content_type = 'application/json')                
         reply = json.loads(response.data)
         self.assertEqual(reply["message"], "Customer has been registered")
         self.assertEqual(response.status_code, 201)
@@ -34,8 +34,8 @@ class Test_auth(unittest.TestCase):
             'password' : "Dag1234"
         }
         
-        response = self.client.post("/api/v1/register", data = json.dumps(
-            dict(customer)), content_type = 'application/json')                
+        response = self.client.post("/api/v1/register", data = json.dumps(customer), 
+                                    content_type = 'application/json')                
         reply = json.loads(response.data)
         self.assertEqual(reply["message"], "The key or value fields are invalid or missing")
         self.assertEqual(response.status_code, 403)
@@ -50,8 +50,8 @@ class Test_auth(unittest.TestCase):
             'password' : "Dag1234"
         }
         
-        response = self.client.post("/api/v1/register", data = json.dumps(
-            dict(customer)), content_type = 'application/json')                  
+        response = self.client.post("/api/v1/register", data = json.dumps(customer), 
+                                    content_type = 'application/json')                  
         reply = json.loads(response.data)
         self.assertEqual(reply["message"], "Username is missing")
         self.assertEqual(response.status_code, 400)
@@ -66,8 +66,8 @@ class Test_auth(unittest.TestCase):
             'password' : "Dag1234"
         }
         
-        response = self.client.post("/api/v1/register", data = json.dumps(
-            dict(customer)), content_type = 'application/json')
+        response = self.client.post("/api/v1/register", data = json.dumps(customer), 
+                                    content_type = 'application/json')
         reply = json.loads(response.data)
         self.assertEquals(reply["message"], "Email address is missing")
         self.assertEquals(response.status_code, 400)
@@ -82,8 +82,8 @@ class Test_auth(unittest.TestCase):
             'password' : ""
         }
         
-        response = self.client.post("/api/v1/register", data = json.dumps(
-            dict(customer)), content_type = 'application/json') 
+        response = self.client.post("/api/v1/register", data = json.dumps(customer), 
+                                    content_type = 'application/json') 
         reply = json.loads(response.data)
         self.assertEquals(reply["message"], "Password is missing")
         self.assertEquals(response.status_code, 400)
@@ -98,8 +98,8 @@ class Test_auth(unittest.TestCase):
             'password' : "Dag1234"
         }
         
-        response = self.client.post("/api/v1/register", data = json.dumps(
-            dict(customer)), content_type = 'application/json')
+        response = self.client.post("/api/v1/register", data = json.dumps(customer), 
+                                    content_type = 'application/json')
         reply = json.loads(response.data)
         self.assertEquals(reply["message"], "Contact is missing")
         self.assertEquals(response.status_code, 400)
@@ -114,8 +114,8 @@ class Test_auth(unittest.TestCase):
             'password' : "Dag1234"
         }
 
-        response = self.client.post("/api/v1/register", data = json.dumps(
-            dict(customer)), content_type = 'application/json')                     
+        response = self.client.post("/api/v1/register", data = json.dumps(customer), 
+                                    content_type = 'application/json')                     
         reply = json.loads(response.data)
         self.assertEqual(reply["message"], "Username should be in characters")
         self.assertEqual(response.status_code, 400)
@@ -130,8 +130,8 @@ class Test_auth(unittest.TestCase):
             'password' : "Dag1234"
         }
 
-        response = self.client.post("/api/v1/register", data = json.dumps(
-            dict(customer)), content_type = 'application/json')                              
+        response = self.client.post("/api/v1/register", data = json.dumps(customer), 
+                                    content_type = 'application/json')                              
         reply = json.loads(response.data)
         self.assertEqual(reply["message"], "Username should have no spaces")
         self.assertEqual(response.status_code, 400)
@@ -146,8 +146,8 @@ class Test_auth(unittest.TestCase):
             'password' : "Dag1234"
         }
 
-        response = self.client.post("/api/v1/register", data = json.dumps(
-            dict(customer)), content_type = 'application/json')                                  
+        response = self.client.post("/api/v1/register", data = json.dumps(customer), 
+                                    content_type = 'application/json')                                  
         reply = json.loads(response.data)
         self.assertEqual(reply["message"], "Email address should be like this format 'daglach7@gmail.com'")
         self.assertEqual(response.status_code, 400)
@@ -162,8 +162,8 @@ class Test_auth(unittest.TestCase):
             'password' : "Dag1234"
         }
 
-        response = self.client.post("/api/v1/register", data = json.dumps(
-            dict(customer)), content_type = 'application/json')                              
+        response = self.client.post("/api/v1/register", data = json.dumps(customer), 
+                                    content_type = 'application/json')                              
         reply = json.loads(response.data)
         self.assertEqual(reply["message"], "Contact should be like this format '+256-755-598090'")
         self.assertEqual(response.status_code, 400)
@@ -178,8 +178,8 @@ class Test_auth(unittest.TestCase):
             'password' : "fgt5"
         }
 
-        response = self.client.post("/api/v1/register", data = json.dumps(
-            dict(customer)), content_type = 'application/json')                                
+        response = self.client.post("/api/v1/register", data = json.dumps(customer), 
+                                    content_type = 'application/json')                                
         reply = json.loads(response.data)
         self.assertEqual(reply["message"], "Password must have 7 characters with atleast a lowercase, uppercase letter and a number")
         self.assertEqual(response.status_code, 400)
@@ -192,8 +192,8 @@ class Test_auth(unittest.TestCase):
             'password' : "Dag1234"
         }
         
-        response = self.client.post("/api/v1/login", data = json.dumps(
-            dict(customer)), content_type = 'application/json') 
+        response = self.client.post("/api/v1/login", data = json.dumps(customer), 
+                                    content_type = 'application/json') 
         reply = json.loads(response.data)
         self.assertEquals(reply["message"], "Customer has been logged in")
         self.assertEquals(response.status_code, 200)
@@ -206,8 +206,8 @@ class Test_auth(unittest.TestCase):
             'password' : "Dag1234"
         }
         
-        response = self.client.post("/api/v1/login", data = json.dumps(
-            dict(customer)), content_type = 'application/json')            
+        response = self.client.post("/api/v1/login", data = json.dumps(customer), 
+                                    content_type = 'application/json')            
         reply = json.loads(response.data)
         self.assertEquals(reply["message"], "Username is missing")
         self.assertEquals(response.status_code, 400)
@@ -220,43 +220,8 @@ class Test_auth(unittest.TestCase):
             'password' : ""
         }
 
-        response = self.client.post("/api/v1/login", data = json.dumps(
-            dict(customer)), content_type = 'application/json')            
+        response = self.client.post("/api/v1/login", data = json.dumps(customer), 
+                                    content_type = 'application/json')            
         reply = json.loads(response.data)
         self.assertEquals(reply["message"], "Password is missing")
         self.assertEquals(response.status_code, 400)
-
-    # Test for login with wrong or no password """
-    # def test_user_login_with_wrong_information(self):
-
-    #     customer = {
-    #         'username' : "Douglas",
-    #         'emailaddress' : "daglach7@gmail.com",
-    #         'contact' : "+256-755-598090",
-    #         'password' : "Dag1234"
-    #     }
-
-    #     customer = {
-    #         'username' : "Derrick",
-    #         'password' : "Dag1234"
-    #     }
-        
-    #     response = self.client.post("/api/v1/register", data=json.dumps(
-    #         dict(customer)), content_type='application/json')
-    #     response = self.client.post("/api/v1/login", data=json.dumps(
-    #         dict(customer)), content_type='application/json')             
-    #     reply = json.loads(response.data)
-    #     self.assertEquals(reply["message"], "Customer does not exist")
-    #     self.assertEquals(response.status_code, 400)
-
-
-        # response = self.client.post("/api/v1/orders", data = json.dumps(
-        #     dict(customerId = "12345", orderId = "09876", thetype = "breakfast", food = "milk and bread", 
-        #          price = "2000", quantity = "2", today = "2018-09-16", status="not completed")), content_type = 'application/json')
-
-        # response = self.client.put("/api/v1/orders/09876", data = json.dumps(
-        #     dict(customerId = "12345", orderId = "09876", thetype = "breakfast", food = "milk and bread", 
-        #          price = "2000", quantity = "2", today = "2018-09-16", status="not completed")), content_type = 'application/json')
-
-        # data = json.loads(response.data.decode())
-        # self.assertEquals(data["message"], "Order status has been updated")
