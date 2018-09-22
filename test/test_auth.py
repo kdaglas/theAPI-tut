@@ -43,7 +43,7 @@ class Test_auth(unittest.TestCase):
                 password = "Dag1234")), content_type = 'application/json')
                                         
         reply = json.loads(response.data)
-        self.assertEqual(reply["message"], "Username is missing")
+        self.assertEqual(reply["message"], "Some data is missing")
         self.assertEqual(response.status_code, 400)
       
 
@@ -56,7 +56,7 @@ class Test_auth(unittest.TestCase):
                 password = "Dag1234")), content_type = 'application/json')
 
         reply = json.loads(response.data)
-        self.assertEquals(reply["message"], "Email address is missing")
+        self.assertEquals(reply["message"], "Some data is missing")
         self.assertEquals(response.status_code, 400)
     
     
@@ -69,7 +69,7 @@ class Test_auth(unittest.TestCase):
                 password = "")), content_type = 'application/json') 
 
         reply = json.loads(response.data)
-        self.assertEquals(reply["message"], "Password is missing")
+        self.assertEquals(reply["message"], "Some data is missing")
         self.assertEquals(response.status_code, 400)
 
 
@@ -81,7 +81,7 @@ class Test_auth(unittest.TestCase):
                 password = "Dag1234")), content_type = 'application/json')
 
         reply = json.loads(response.data)
-        self.assertEquals(reply["message"], "Contact is missing")
+        self.assertEquals(reply["message"], "Some data is missing")
         self.assertEquals(response.status_code, 400)
 
 
