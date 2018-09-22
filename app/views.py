@@ -34,26 +34,19 @@ def register():
 
 
 @app.route("/api/v1/login", methods=['POST'])
-def login(username, password):
+def login():
     data = request.get_json()
     username = data.get('username')
     password = data.get('password')
 
-    if len(username) < 1:
-        return jsonify({'message': 'Username is missing'}), 400
-    if len(password) < 1:
-        return jsonify({'message': 'Password is missing'}), 400
+    valid = Validate.validate_login_inputs(data['username'], data['password'])
 
-    # customer = Customer.get_a_customer(customerId)
-    # return jsonify({'Customer': customer, 'message': 'Your one order successfully viewed'}), 201
-
-    # for customer in all_customers:
-    #     if customer.username == username and customer.password == password:
-    #         return jsonify({'message': 'Successfully logged in'}), 200
-    # return jsonify({'message': 'Customer does not exist'}), 400
-
-    customer = Customer.login(username, password)
-    return jsonify({'message': 'Customer has been logged in'}), 200
+    if valid == True:
+        customer = Customer.login(username, password)
+        return jsonify({'Customer': customer,
+                        'message': 'Customer has been logged in'}), 200
+    else:
+            return valid
 
 
 @app.route("/api/v1/orders", methods=['POST'])
@@ -72,7 +65,7 @@ def place_order():
 
         valid = Validate.validate_order_input(data['customerId'], data['thetype'], data['food'], data['price'], data['quantity'])
 
-        if valid == True:     
+        if valid == True:   
             new_order = Order(customerId, orderId, thetype, food, price, quantity, status, today)
             placed_order = Order.place_order(new_order)
             return jsonify({'Placed order': placed_order,
@@ -88,9 +81,12 @@ def place_order():
 @app.route("/api/v1/orders", methods=['GET'])
 def get_all_orders():
     
+    # if request.method == 'GET':
     all_orders = Order.get_all_orders()
     return jsonify({'All your orders': all_orders,
                     'message': 'All orders have been viewed'}), 302
+    # else:
+    #     return jsonify({'message': 'Bad request'}), 405
 
 
 @app.route("/api/v1/orders/<orderId>", methods=["GET"])

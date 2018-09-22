@@ -40,7 +40,7 @@ class Customer():
     @classmethod
     def login(cls, username, password):
 
-        # method that gets all the customers who have registered
+        # method that logs in the customer who is registered
 
         for customer in all_customers:
             if customer.get('username') == username and customer.get('password'):

@@ -34,12 +34,6 @@ class Order():
             'today' : self.today
         }
 
-        
-
-        # for order in all_orders:
-        #     if order.get('customerId') == customerId and order.get('food') == food:
-        #         return jsonify({' message':'Make another order'}), 403
-
         all_orders.append(order)
         return order
 

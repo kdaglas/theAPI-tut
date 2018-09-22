@@ -1,8 +1,10 @@
 import re
 from flask import jsonify
 # from app.modules.order_model import Order
-# from app.modules.customer_model import Customer
+from app.modules.customer_model import Customer
 
+
+all_customers = []
 
 class Validate():
 
@@ -15,6 +17,57 @@ class Validate():
     #     self.food = food
     #     self.price = price
     #     self.quantity = quantity
+
+
+    @classmethod
+    def validate_registration_inputs(cls, username, emailaddress, contact, password):
+
+        # method to validate customer input
+
+        if username == '':
+            return jsonify({"message": "Username is missing"}), 400
+        elif ' ' in username:
+            return jsonify({"message": "Username should have no spaces"}), 400
+        elif not re.search(r"\b[a-zA-Z]+\b", username):
+            return jsonify({"message": "Username should be in characters"}), 400
+        elif emailaddress == '':
+            return jsonify({"message": "Email address is missing"}), 400
+        elif not re.search(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", emailaddress):
+            return jsonify({"message": "Email address should be like this format 'daglach7@gmail.com'"}), 400
+        elif contact == '':
+            return jsonify({"message": "Contact is missing"}), 400
+        elif not re.search(r"^\+256[-]\d{3}[-]\d{6}$", contact):
+            return jsonify({"message": "Contact should be like this format '+256-755-598090'"}), 400
+        elif password == '':
+            return jsonify({"message": "Password is missing"}), 400
+        elif not re.search(r"^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{7}$", password):
+            return jsonify({"message": "Password must have 7 characters with atleast a lowercase, uppercase letter and a number"}), 400
+        else:
+            return True
+
+
+    @classmethod
+    def validate_login_inputs(cls, username, password):
+
+        # method to validate customer input
+
+        
+
+        if username == '':
+            return jsonify({"message": "Username is missing"}), 400
+        elif ' ' in username:
+            return jsonify({"message": "Username should have no spaces"}), 400
+        elif password == '':
+            return jsonify({"message": "Password is missing"}), 400
+        else:
+            return True
+
+        # for customer in all_customers:
+        #     if customer.get('username') == username and customer.get('password') == password:
+        #         return customer
+        #     return jsonify({'message': "Customer doesnot exist"}), 400
+        # return jsonify({'message': "Customer doesnot exist"}), 400
+
 
     @classmethod
     def validate_order_input(cls, customerId, thetype, food, price, quantity):
@@ -87,30 +140,6 @@ class Validate():
     #     self.password = password
 
 
-    @classmethod
-    def validate_registration_inputs(cls, username, emailaddress, contact, password):
-
-        # method to validate customer input
-
-        if username == '':
-            return jsonify({"message": "Username is missing"}), 400
-        elif ' ' in username:
-            return jsonify({"message": "Username should have no spaces"}), 400
-        elif not re.search(r"\b[a-zA-Z]+\b", username):
-            return jsonify({"message": "Username should be in characters"}), 400
-        elif emailaddress == '':
-            return jsonify({"message": "Email address is missing"}), 400
-        elif not re.search(r"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", emailaddress):
-            return jsonify({"message": "Email address should be like this format 'daglach7@gmail.com'"}), 400
-        elif contact == '':
-            return jsonify({"message": "Contact is missing"}), 400
-        elif not re.search(r"^\+256[-]\d{3}[-]\d{6}$", contact):
-            return jsonify({"message": "Contact should be like this format '+256-755-598090'"}), 400
-        elif password == '':
-            return jsonify({"message": "Password is missing"}), 400
-        elif not re.search(r"^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{7}$", password):
-            return jsonify({"message": "Password must have 7 characters with atleast a lowercase, uppercase letter and a number"}), 400
-        else:
-            return True
+    
 
         

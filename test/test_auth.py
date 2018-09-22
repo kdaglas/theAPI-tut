@@ -74,7 +74,8 @@ class Test_auth(unittest.TestCase):
 
 
     def test_registration_with_empty_contact(self):
-        """ Test for empty password validation """
+
+        # Test for empty password validation
         
         response = self.client.post("/api/v1/register", data = json.dumps(
             dict(username = "Douglas", emailaddress="daglach7@gmail.com", contact = "", 
@@ -150,14 +151,16 @@ class Test_auth(unittest.TestCase):
         self.assertEqual(response.status_code, 400)
 
     
-    # def test_user_login_successful(self):
-    #     """ Test for successful login """
+    def test_user_login_successful(self):
+
+        # Test for successful login """
         
-    #     response = self.client.post("/api/v1/login", data = json.dumps(
-    #         dict(username = "Douglas", password = "Dag1234")), content_type = 'application/json')           
-    #     reply = json.loads(response.data)
-    #     self.assertEquals(reply["message"], "Customer has been logged in")
-    #     self.assertEquals(response.status_code, 200)
+        response = self.client.post("/api/v1/login", data = json.dumps(
+            dict(username = "Douglas", password = "Dag1234")), content_type = 'application/json') 
+
+        reply = json.loads(response.data)
+        self.assertEquals(reply["message"], "Customer has been logged in")
+        self.assertEquals(response.status_code, 200)
 
 
     # def test_user_login_with_no_username(self):
