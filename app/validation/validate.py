@@ -8,22 +8,10 @@ all_customers = []
 
 class Validate():
 
-    # def __init__(self, mealId, thetype, food, price, quantity):
-
-    #     # valiation class for the meal inputs
-
-    #     self.mealId = mealId
-    #     self.thetype = thetype
-    #     self.food = food
-    #     self.price = price
-    #     self.quantity = quantity
-
-
+    # method to validate customer input
     @classmethod
     def validate_registration_inputs(cls, username, emailaddress, contact, password):
-
-        # method to validate customer input
-
+        
         if username == '':
             return jsonify({"message": "Username is missing"}), 400
         elif ' ' in username:
@@ -45,13 +33,9 @@ class Validate():
         else:
             return True
 
-
+    # method to validate customer input
     @classmethod
     def validate_login_inputs(cls, username, password):
-
-        # method to validate customer input
-
-        
 
         if username == '':
             return jsonify({"message": "Username is missing"}), 400
@@ -62,17 +46,9 @@ class Validate():
         else:
             return True
 
-        # for customer in all_customers:
-        #     if customer.get('username') == username and customer.get('password') == password:
-        #         return customer
-        #     return jsonify({'message': "Customer doesnot exist"}), 400
-        # return jsonify({'message': "Customer doesnot exist"}), 400
-
-
+    # method to validate my input
     @classmethod
     def validate_order_input(cls, customerId, thetype, food, price, quantity):
-
-        # method to validate my input
 
         if customerId == '':
             return jsonify({"message": "CustomerId is missing"}), 400
@@ -103,11 +79,9 @@ class Validate():
         else:
             return True
 
-
+    # method to validate the ids input by the customer
     @classmethod
     def validate_id(cls, orderId):
-        
-        # method to validate the ids input by the customer
 
         if type(orderId) != int:
             return jsonify({"message": "Your order id should be a number"}), 400
@@ -116,30 +90,11 @@ class Validate():
         else:
             return True
 
-
+    # method to validate the ids input by the customer
     @classmethod
     def validate_duplicate(cls, customerId, all_orders):
         
-        # method to validate the ids input by the customer
-
         for order in all_orders:
             if order['customerId'] == customerId:
                 return True
-
-
-
-
-    # def __init__(self, customerId, username, emailaddress, contact, password):
-
-    #     # valiation class for the meal inputs
-
-    #     self.customerId = customerId
-    #     self.username = username
-    #     self.emailaddress = emailaddress
-    #     self.contact = contact
-    #     self.password = password
-
-
-    
-
         
