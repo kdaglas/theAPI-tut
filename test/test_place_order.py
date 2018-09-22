@@ -22,6 +22,19 @@ class Test_Orders(unittest.TestCase):
         self.assertEquals(response.status_code, 201)
 
     
+    def test_place_order_with_invalid_keys(self):
+
+        # a test for successfully placing an order 
+
+        response = self.client.post("/api/v1/orders", data = json.dumps(
+            dict(customerId = "1234567890", orderId = "0987654321", thetype = "breakfast", food = "milk and bread", 
+                 price = "2000", ntity = "2", today = "2018-09-16")), content_type = 'application/json')
+                                
+        reply = json.loads(response.data)
+        self.assertEqual(reply["message"], "The key or value fields are invalid or missing")
+        self.assertEqual(response.status_code, 403)
+
+    
     def test_with_empty_customerId(self):
 
         # Test for empty customerId validation

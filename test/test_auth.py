@@ -20,13 +20,26 @@ class Test_auth(unittest.TestCase):
         self.assertEqual(reply["message"], "Customer has been registered")
         self.assertEqual(response.status_code, 201)
 
+
+    def test_registration_with_wrong_keys(self):
+
+        # Testing for user registration
+        
+        response = self.client.post("/api/v1/register", data = json.dumps(
+            dict(username = "Douglas", email = "daglach7@gmail.com", contact = "+256-755-598090", 
+                password = "Dag1234")), content_type = 'application/json')
+                                        
+        reply = json.loads(response.data)
+        self.assertEqual(reply["message"], "The key or value fields are invalid or missing")
+        self.assertEqual(response.status_code, 403)
+
     
     def test_registration_with_empty_username(self):
         
         # Test for empty username validation
         
         response = self.client.post("/api/v1/register", data = json.dumps(
-            dict(username = "", emailaddress="daglach7@gmail.com", contact = "+256-755-598090", 
+            dict(username = "", emailaddress = "daglach7@gmail.com", contact = "+256-755-598090", 
                 password = "Dag1234")), content_type = 'application/json')
                                         
         reply = json.loads(response.data)

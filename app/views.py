@@ -10,23 +10,27 @@ import uuid
 @app.route("/api/v1/register", methods=['POST'])
 def register():
 
-    # try:
-    data = request.get_json()
-    customerId = int(str(uuid.uuid1().int)[:5])
-    username = data.get('username')
-    emailaddress = data.get('emailaddress')
-    contact = data.get('contact')
-    password = data.get('password')
+    try:
+        data = request.get_json()
+        customerId = int(str(uuid.uuid1().int)[:5])
+        username = data.get('username')
+        emailaddress = data.get('emailaddress')
+        contact = data.get('contact')
+        password = data.get('password')
 
-    valid = Validate.validate_registration_inputs(data['username'], data['emailaddress'], data['contact'], data['password'])
+        valid = Validate.validate_registration_inputs(data['username'], data['emailaddress'], data['contact'], data['password'])
 
-    if valid == True:
-        new_customer = Customer(customerId, username, emailaddress, contact, password)
-        registered_customer = Customer.register_customer(new_customer)
-        return jsonify({'New customer':registered_customer,
-                        'message': 'Customer has been registered'}), 201
-    else:
-        return valid 
+        if valid == True:
+            new_customer = Customer(customerId, username, emailaddress, contact, password)
+            registered_customer = Customer.register_customer(new_customer)
+            return jsonify({'New customer':registered_customer,
+                            'message': 'Customer has been registered'}), 201
+        else:
+            return valid
+    except:
+        response = jsonify({"message": "The key or value fields are invalid or missing"})
+        response.status_code = 403
+        return response 
 
 
 @app.route("/api/v1/login", methods=['POST'])
@@ -55,25 +59,30 @@ def login(username, password):
 @app.route("/api/v1/orders", methods=['POST'])
 def place_order():
 
-    data = request.get_json()
-    orderId = int(str(uuid.uuid1().int)[:5])
-    customerId = data.get('customerId')
-    today = str(date.today())
-    food = data.get('food')
-    thetype = data.get('thetype')
-    price = data.get('price')
-    quantity = data.get('quantity')
-    status = 'not completed'
+    try:
+        data = request.get_json()
+        orderId = int(str(uuid.uuid1().int)[:5])
+        customerId = data.get('customerId')
+        today = str(date.today())
+        food = data.get('food')
+        thetype = data.get('thetype')
+        price = data.get('price')
+        quantity = data.get('quantity')
+        status = 'not completed'
 
-    valid = Validate.validate_order_input(data['customerId'], data['thetype'], data['food'], data['price'], data['quantity'])
+        valid = Validate.validate_order_input(data['customerId'], data['thetype'], data['food'], data['price'], data['quantity'])
 
-    if valid == True:     
-        new_order = Order(customerId, orderId, thetype, food, price, quantity, status, today)
-        placed_order = Order.place_order(new_order)
-        return jsonify({'Placed order': placed_order,
-                        'message': 'Your order has been placed'}), 201
-    else:
-        return valid
+        if valid == True:     
+            new_order = Order(customerId, orderId, thetype, food, price, quantity, status, today)
+            placed_order = Order.place_order(new_order)
+            return jsonify({'Placed order': placed_order,
+                            'message': 'Your order has been placed'}), 201
+        else:
+            return valid
+    except:
+        response = jsonify({"message": "The key or value fields are invalid or missing"})
+        response.status_code = 403
+        return response
 
 
 @app.route("/api/v1/orders", methods=['GET'])
