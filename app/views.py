@@ -35,18 +35,24 @@ def register():
 
 @app.route("/api/v1/login", methods=['POST'])
 def login():
-    data = request.get_json()
-    username = data.get('username')
-    password = data.get('password')
 
-    valid = Validate.validate_login_inputs(data['username'], data['password'])
+    try:
+        data = request.get_json()
+        username = data.get('username')
+        password = data.get('password')
 
-    if valid == True:
-        customer = Customer.login(username, password)
-        return jsonify({'Customer': customer,
-                        'message': 'Customer has been logged in'}), 200
-    else:
-            return valid
+        valid = Validate.validate_login_inputs(data['username'], data['password'])
+
+        if valid == True:
+            customer = Customer.login(username, password)
+            return jsonify({'Customer': customer,
+                            'message': 'Customer has been logged in'}), 200
+        else:
+                return valid
+    except:
+        response = jsonify({"message": "The key or value fields are invalid or missing"})
+        response.status_code = 403
+        return response
 
 
 @app.route("/api/v1/orders", methods=['POST'])

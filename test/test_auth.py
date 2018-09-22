@@ -198,6 +198,20 @@ class Test_auth(unittest.TestCase):
         self.assertEquals(reply["message"], "Customer has been logged in")
         self.assertEquals(response.status_code, 200)
 
+    # Testing for user login
+    def test_login_with_wrong_keys(self):
+
+        customer = {
+            'username' : "Douglas",
+            'passw' : "Dag1234"
+        }
+        
+        response = self.client.post("/api/v1/login", data = json.dumps(customer), 
+                                    content_type = 'application/json')                
+        reply = json.loads(response.data)
+        self.assertEqual(reply["message"], "The key or value fields are invalid or missing")
+        self.assertEqual(response.status_code, 403)
+
     # Test for login with wrong or no username
     def test_user_login_with_no_username(self):
          
