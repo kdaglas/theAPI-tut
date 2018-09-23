@@ -8,15 +8,19 @@ class Test_Orders(unittest.TestCase):
     def setUp(self):
         self.client = app.test_client()
 
-
+    # Test for placing an order
     def test_add_order(self):
 
-        # Test for placing an order
-
-        response = self.client.post("/api/v1/orders", data = json.dumps(
-            dict(customerId = "12345", orderId = "09876", thetype = "breakfast", food = "milk and bread", 
-                 price = "2000", quantity = "2", today = "2018-09-16", status="not completed")), content_type = 'application/json') 
-
+        order = {
+            'customerId' : "12345",
+            'thetype' : "breakfast",
+            'food' : "milk and bread",
+            'price' : "2000",
+            'quantity' : "2"
+        }
+        
+        response = self.client.post("/api/v1/register", data = json.dumps(order), 
+                                    content_type = 'application/json')                
         reply = json.loads(response.data)
         self.assertEquals(reply["message"], "Your order has been placed")
         self.assertEquals(response.status_code, 201)

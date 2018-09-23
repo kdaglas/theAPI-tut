@@ -8,12 +8,10 @@ class Test_Get_Orders(unittest.TestCase):
     def setUp(self):
         self.client = app.test_client()
 
+    # a test for getting all orders
     def test_get_all_orders(self):
 
-        # a test for getting all orders
-
         response = self.client.get("/api/v1/orders", content_type = 'application/json')
-                                
         reply = json.loads(response.data)
         self.assertEqual(reply["message"], "All orders have been viewed")
         self.assertEqual(response.status_code, 302)
