@@ -8,12 +8,21 @@ class Test_Get_Orders(unittest.TestCase):
     def setUp(self):
         self.client = app.test_client()
 
-    # a test for getting all orders
+    ''' A test for getting all orders '''
     def test_get_all_orders(self):
 
         response = self.client.get("/api/v1/orders", content_type = 'application/json')
         reply = json.loads(response.data)
         self.assertEqual(reply["message"], "All orders have been viewed")
+        self.assertEqual(response.status_code, 302)
+
+
+    ''' Test to fetch single order '''
+    def test_get_single_order(self):
+        
+        response = self.client.get("/api/v1/orders/4536784291", content_type = 'application/json')        
+        reply = json.loads(response.data)
+        self.assertEqual(reply["message"], "One order has been viewed")
         self.assertEqual(response.status_code, 302)
 
 
@@ -29,18 +38,7 @@ class Test_Get_Orders(unittest.TestCase):
     #     reply2 = json.loads(response2.data.decode())
     #     self.assertEquals(reply2["message"],"No order added")
 
-
-    def test_get_single_order(self):
-
-        # Test to fetch single order
-
-        response = self.client.get("/api/v1/orders/4536784291", content_type = 'application/json')
-                                
-        reply = json.loads(response.data)
-        self.assertEqual(reply["message"], "One order has been viewed")
-        self.assertEqual(response.status_code, 302)
-
-
+    
     # def test_get_single_order_with_wrong_id(self):
 
     #     # Test to fetch single order

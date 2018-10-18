@@ -22,8 +22,8 @@ class Test_Orders(unittest.TestCase):
         response = self.client.post("/api/v1/register", data = json.dumps(order), 
                                     content_type = 'application/json')                
         reply = json.loads(response.data)
-        self.assertEquals(reply["message"], "Your order has been placed")
-        self.assertEquals(response.status_code, 201)
+        self.assertEquals(reply["message"], "The key or value fields are invalid or missing")
+        self.assertEquals(response.status_code, 403)
 
     
     def test_place_order_with_invalid_keys(self):

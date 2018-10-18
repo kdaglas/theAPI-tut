@@ -1,3 +1,5 @@
+''' These are the imports for the required packages '''
+
 from app import app
 from flask import request, json, jsonify
 from app.modules.customer_model import Customer
